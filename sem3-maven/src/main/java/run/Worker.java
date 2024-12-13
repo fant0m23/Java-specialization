@@ -31,7 +31,7 @@ public class Worker implements Comparable<Worker> {
         return date1.compareTo(date2);
     }
 
-    public void salaryIncrease(){
-        this.salary *= 1.08;
+    public void salaryIncrease(Double percent){
+        this.salary *= percent;
     }
 }

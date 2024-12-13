@@ -9,14 +9,28 @@
 */
 
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.LongFunction;
+
 public class Main {
     public static void main(String[] args) {
 
-        int[] nums = {1, 2, 0, -61, 5, 0, 0, 8, 17};
+        int[] nums = {1, 2, 0, 61, 5, 0, 0, 8, 17};
 
         System.out.println(countEvens(nums, LambdaHelper::isEven));
         System.out.println(difBetweenMinMaxValues(nums, LambdaHelper::isBigger));
         System.out.println(zerosSideBySide(nums));
+
+        // очень много встроенных функциональных интерфейсов в java.util.function.*
+        BiFunction<Integer, Integer, Character> sumToChar = (c, d) -> (char) (c + d);
+        char c = sumToChar.apply(nums[3], nums[8]);
+        BinaryOperator<Integer> binaryOperator = Integer::sum;
+        System.out.println(binaryOperator.apply(nums[3], nums[1]));
+        System.out.println(sumToChar.apply(nums[3], nums[1]));
     }
 
     private static int countEvens(int[] nums, MyExpression func) {
