@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         Worker e1 = new Employee("Sergey", 12, 4, 1987, 98000);
         Worker e2 = new Employee("Vlad", 26, 11, 1985, 122000);
-        Worker e3 = new Employee("Elena", 5, 3, 1996, 107000);
+        Worker e3 = new Employee("Marina", 5, 3, 1996, 107000);
         Worker m1 = new Manager("Daria", 10, 9, 1991, 157000);
         Worker m2 = new Manager("Kirill", 14, 10, 1978, 165000);
         Worker e4 = new Employee();
@@ -52,12 +52,9 @@ public class Main {
             System.out.println(w);
         }
         System.out.println("\n----------- Повышение зарплаты работникам на 8% ------------");
+        Manager.payIncreaser(workers, 1.08);
         for (Worker w : workers) {
-            if (w instanceof Manager) System.out.println(w + " " + w.getClass());
-            else {
-                w.salaryIncrease();
-                System.out.println(w + " " + w.getClass());
-            }
+            System.out.println(w + "\t" + w.getClass());
         }
     }
 }
