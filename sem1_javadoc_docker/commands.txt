@@ -1,0 +1,12 @@
+javac -sourcepath ./src -d ./out ./src/gb/javacore/main/Main.java
+
+//  RUN ["javac -sourcepath ./src -d ./out ./src/gb/javacore/main/Main.java "]
+
+docker build -t myapp:1 .
+docker run -it myapp:1
+
+java -cp ./out/ gb.javacore.main.Main
+javadoc -d docs -sourcepath src -cp out -subpackages gb
+
+docker cp <containerId>:/file/path/within/container /host/path/target
+docker cp affectionate_khayyam:/usr/docs/ .
