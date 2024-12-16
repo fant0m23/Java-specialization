@@ -18,14 +18,30 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
+        String login = "master99";
+        String password = "123456";
+        String confirmPassword = "123456";
 
-
+        boolean b = checkLoginPassword(login, password, confirmPassword);
+        System.out.println(b);
     }
 
-    public static boolean checkLoginPassword(String login, String password, String confirmPassword) throws
-            WrongLoginException, WrongPasswordException {
+    public static boolean checkLoginPassword(String login, String password, String confirmPassword) {
+        try {
+            if (login.length() > 20)
+                throw new WrongLoginException(login.length());
 
+            if (password.length() > 20)
+                throw new WrongPasswordException(password.length());
 
-        return true;
+            if (!password.equals(confirmPassword))
+                throw new WrongPasswordException(confirmPassword, password);
+
+            return true;
+
+        } catch (WrongLoginException | WrongPasswordException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

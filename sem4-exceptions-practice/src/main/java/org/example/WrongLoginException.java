@@ -5,7 +5,8 @@ public class WrongLoginException extends Exception {
         super();
     }
 
-    WrongLoginException(String msg) {
-        super(msg);
+    WrongLoginException(int b){
+        super("Длина login должна быть меньше 20 символов! Ожидалось не более 20 символов / Фактически введено " +
+                b + " символов");
     }
 }
