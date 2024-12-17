@@ -20,35 +20,52 @@ public class Main {
     };
     private static Order[] orders = new Order[5];
 
-    public static void main(String[] args) throws CustomerException {
-        Customer unknownCustomer = new Customer("Bob Dylan", 83, 89150682268L);
-        Product unknownProduct = new Product("Fender Stratocaster", 1200);
+    public static void main(String[] args) throws CustomerException, InterruptedException {
+        // тестовый массив покупателей, содержащий 4 существующих и 1 некорректного
+        Customer[] testArrCustomers = {customers[0], customers[1], customers[0], customers[1],
+                new Customer("Bob Dylan", 83, 89150682268L)};
+        // тестовый массив товаров, содержащий 5 существующих и 1 некорректный
+        Product[] testArrProducts = {products[0], products[1], products[2], products[3], products[4],
+                new Product("Fender Stratocaster", 1200)};
 
-        try {
-            orders[0] = makePurchase(customers[1], products[3], 2);
-            orders[1] = makePurchase(customers[1], unknownProduct, 2);
-            orders[2] = makePurchase(customers[0], products[2], 1);
-            orders[3] = makePurchase(customers[0], products[0], 111);
-            orders[4] = makePurchase(unknownCustomer, products[4], 1);
-
-        } catch (ProductException | AmountException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("\nВсего было оформлено " + counterOrders() + " заказов.");
+        Random rndIndex = new Random();
+        int rndIndexCustomers = 0;
+        int rndIndexProducts = 0;
+        int rndAmount = 1;
+        do {
+            try {
+                rndIndexCustomers = rndIndex.nextInt(0, 5);
+                rndIndexProducts = rndIndex.nextInt(0, 6);
+                rndAmount = rndIndex.nextInt(-2, 23);
+                orders[counterOrders()] = makePurchase(
+                        testArrCustomers[rndIndexCustomers], testArrProducts[rndIndexProducts], rndAmount);
+            } catch (ProductException e) {
+                e.printStackTrace();
+            } catch (AmountException e) {
+                try {
+                    orders[counterOrders()] = makePurchase(testArrCustomers[rndIndexCustomers],
+                            testArrProducts[rndIndexProducts], 1);
+                } catch (ProductException | AmountException | CustomerException ex) {
+                    ex.getMessage();
+                }
+                e.printStackTrace();
+            } catch (CustomerException e) {
+                throw new CustomerException(testArrCustomers[rndIndexCustomers]);
+            } finally {
+            }
+            Thread.sleep(200); // для более корректного вывода на консоль StackTrace'ов и количества оформленных заказов
+            System.out.println("Всего было оформлено " + counterOrders() + " заказов.");
+        } while (counterOrders() != 5);
     }
 
     public static Order makePurchase(Customer customer, Product product, int amount) throws
             AmountException, CustomerException, ProductException {
-        int finalAmount = amount;
         if (!buyerExist(customer)) throw new CustomerException(customer);
         if (!isProductInStock(product)) throw new ProductException(product);
-        if (amount < 0 || amount > 20){
-            finalAmount = 1;
-            throw new AmountException();
-        }
-        System.out.println("Заказ №" + counterOrders() + " оформлен.");
-        return new Order(customer, product, finalAmount);
+        if (amount <= 0 || amount > 20) throw new AmountException(amount);
+        Order order = new Order(customer, product, amount);
+        System.out.println("\nОформлен новый заказ: " + order);
+        return order;
     }
 
     private static boolean buyerExist(Customer customer) {
