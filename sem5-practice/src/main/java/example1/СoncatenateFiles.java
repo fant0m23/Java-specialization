@@ -11,7 +11,7 @@ import java.io.IOException;
 объединятся в какой-то третий)
  */
 
-public class concatenateFiles {
+public class СoncatenateFiles {
     public static void main(String[] args) {
         File f1 = new File("src/main/resources/ex1.txt");
         File f2 = new File("src/main/resources/ex2.txt");
