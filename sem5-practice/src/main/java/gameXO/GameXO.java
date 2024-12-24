@@ -8,6 +8,7 @@ package gameXO;
 */
 
 import java.io.*;
+import java.util.Arrays;
 
 
 public class GameXO {
@@ -17,6 +18,10 @@ public class GameXO {
         String pathFile = "src/main/resources/threeBytes.txt";
 
         gameXOtoFile(arr, pathFile);
+
+        // считывание трех байт из файла и преобразование в исходное поле игры крестики-нолики
+        byte[] mass = gameXOfromFile(pathFile);
+        System.out.println(Arrays.toString(mass));
     }
 
     private static void gameXOtoFile(byte[] arr, String pathFile) {
@@ -42,5 +47,24 @@ public class GameXO {
         }
     }
 
-
+    private static byte[] gameXOfromFile(String pathFile) {
+        try (InputStream in = new FileInputStream(pathFile)) {
+            byte[] bytes = in.readAllBytes();
+            System.out.println("Из файла считано " + bytes.length + " байта.");
+            byte[] result = new byte[9];
+            int index = 0;
+            for (int i = 0; i < bytes.length; i++) {
+                for (int j = 16; j >= 1; j /= 4) {
+                    result[index] = (byte) (bytes[i] / j);
+                    bytes[i] = (byte) (bytes[i] % j);
+                    index++;
+                }
+            }
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Ошибка записи в файл!");
+            return new byte[9];
+        }
+    }
 }
